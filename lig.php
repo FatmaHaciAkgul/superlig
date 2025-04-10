@@ -1,35 +1,35 @@
 <?php
-// Takımları al
+// Takimlari al
 $takimlar = $_POST['takimlar'] ?? [];
 
 // Geçersiz giriş kontrolü
 if (count($takimlar) !== 18) {
-    die("Lütfen 18 takım giriniz.");
+    die("Lütfen 18 takim giriniz.");
 }
 
-// Her takımın istatistiklerini tutacak dizi
+// Her takimin istatistiklerini tutacak dizi
 $puan_durumu = [];
 foreach ($takimlar as $takim) {
     $puan_durumu[$takim] = [
-        'O' => 0,  // Oynadığı maç
+        'O' => 0,  // Oynadiği maç
         'G' => 0,  // Galibiyet
         'B' => 0,  // Beraberlik
         'M' => 0,  // Mağlubiyet
-        'AG' => 0, // Attığı gol
+        'AG' => 0, // Attiği gol
         'YG' => 0, // Yediği gol
         'AV' => 0, // Averaj
         'P' => 0   // Puan
     ];
 }
 
-// Maçları oynat (çift devreli: her takım diğer takımla hem iç hem dış maç yapar)
+// Maçlari oynat (çift devreli: her takim diğer takimla hem iç hem diş maç yapar)
 for ($i = 0; $i < count($takimlar); $i++) {
     for ($j = 0; $j < count($takimlar); $j++) {
         if ($i != $j) {
             $ev_sahibi = $takimlar[$i];
             $deplasman = $takimlar[$j];
 
-            // Rastgele goller (0-5 arası)
+            // Rastgele goller (0-5 arasi)
             $ev_gol = rand(0, 5);
             $dep_gol = rand(0, 5);
 
@@ -44,12 +44,12 @@ for ($i = 0; $i < count($takimlar); $i++) {
             $puan_durumu[$deplasman]['YG'] += $ev_gol;
 
             if ($ev_gol > $dep_gol) {
-                // Ev sahibi kazandı
+                // Ev sahibi kazandi
                 $puan_durumu[$ev_sahibi]['G']++;
                 $puan_durumu[$deplasman]['M']++;
                 $puan_durumu[$ev_sahibi]['P'] += 3;
             } elseif ($dep_gol > $ev_gol) {
-                // Deplasman kazandı
+                // Deplasman kazandi
                 $puan_durumu[$deplasman]['G']++;
                 $puan_durumu[$ev_sahibi]['M']++;
                 $puan_durumu[$deplasman]['P'] += 3;
@@ -64,13 +64,13 @@ for ($i = 0; $i < count($takimlar); $i++) {
     }
 }
 
-// Averajları hesapla
+// Averajlari hesapla
 foreach ($puan_durumu as $takim => &$deger) {
     $deger['AV'] = $deger['AG'] - $deger['YG'];
 }
-unset($deger); // referansı temizle
+unset($deger); // referansi temizle
 
-// Puan durumuna göre sırala
+// Puan durumuna göre sirala
 uasort($puan_durumu, function($a, $b) {
     if ($a['P'] != $b['P']) return $b['P'] - $a['P'];
     if ($a['AV'] != $b['AV']) return $b['AV'] - $a['AV'];
@@ -95,7 +95,7 @@ uasort($puan_durumu, function($a, $b) {
     <table>
         <tr>
             <th>#</th>
-            <th>Takım</th>
+            <th>Takim</th>
             <th>O</th>
             <th>G</th>
             <th>B</th>
